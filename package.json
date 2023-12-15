@@ -4,7 +4,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test": "vitest"
+    "start:d1": "node ./src/day-01",
+    "test": "vitest",
+    "test:d1": "vitest related ./src/day-01"
   },
   "keywords": [],
   "author": "wschik",
