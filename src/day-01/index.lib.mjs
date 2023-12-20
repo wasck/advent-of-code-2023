@@ -1,3 +1,16 @@
+const LetterNumbers = {
+  ZERO: 0,
+  ONE: 1,
+  TWO: 2,
+  THREE: 3,
+  FOUR: 4,
+  FIVE: 5,
+  SIX: 6,
+  SEVEN: 7,
+  EIGHT: 8,
+  NINE: 9,
+};
+
 /**
  * 
  * @param {*} text to find digit
@@ -46,6 +59,36 @@ function getFirstLastDigitAsNumber(text) {
   return result
 }
 
+/**
+ * 
+ * @param {*} text text to identify lettered numbers
+ * @returns list of objects with index and value or empty array
+ */
+function getSpelledNumbers(text) {
+  const letterNumbers = Object.keys(LetterNumbers).map(number => number.toLowerCase());
+  const result = new String(text);
+  const positionMap = [];
+
+  letterNumbers.forEach(number => {
+      let startIndex = 0;
+
+      while(result.includes(number, startIndex)) {
+        positionMap.push({
+          index: result.indexOf(number, startIndex), 
+          value: LetterNumbers[number.toUpperCase()]
+        });
+        startIndex = result.indexOf(number, startIndex) + number.length;
+      }
+  });
+
+  positionMap.sort((a,b) => a.index - b.index);
+
+  return positionMap.length 
+    ? [ positionMap[0], positionMap[positionMap.length - 1] ]
+        .filter(item => !!item.value)
+    : [];
+}
+
 
 /**
  * 
@@ -62,5 +105,6 @@ export {
   getFirstDigit,
   getLastDigit,
   getFirstLastDigitAsNumber,
+  getSpelledNumbers,
   total
 }

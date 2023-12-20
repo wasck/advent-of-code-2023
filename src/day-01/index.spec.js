@@ -3,6 +3,7 @@ import {
   getFirstDigit,
   getLastDigit,
   getFirstLastDigitAsNumber,
+  getSpelledNumbers,
   total
 } from './index.lib.mjs';
 import { readFile } from '../shared/file-reader.mjs';
@@ -83,4 +84,52 @@ describe('Numbers in strings - Part I', () => {
 
     expect(total(numbers)).toBe(55621);
   });
+})
+
+
+describe('Numbers in strings - Part II', () => {
+  const toTest = [
+    { text: 'two1nine', expect: {value: 29, index: [0,4]} },
+    { text: 'eightwothree', expect: {value: 83, index: [0,7]} },
+    { text: 'abcone2threexyz', expect: {value: 13, index: [3,7]} },
+    { text: 'xtwone3four', expect: {value: 24, index: [1,7]} },
+    { text: '4nineeightseven2', expect: {value: 42, index: [0,15]} },
+    { text: 'zoneight234', expect: {value: 14, index: [1,10]} },
+    { text: '7pqrstsixteen', expect: {value: 76, index: [0,6]}},
+  ];
+
+  const sum = toTest
+    .map(test => test.expect.value)
+    .map(value => value || 0)
+    .reduce((acc, cur) => acc += cur);
+
+  describe('Find first and last spelled numbers', () => {
+    const toTest = [
+      { text: 'two1nine', expect: {value: 29, index: [0,4]} },
+      { text: 'eightwothree', expect: {value: 83, index: [0,7]} },
+      { text: 'abcone2threexyz', expect: {value: 13, index: [3,7]} },
+      { text: 'xtwone3four', expect: {value: 24, index: [1,7]} },
+      { text: '4nineeightseven2', expect: {value: 97, index: [1,10]} },
+      { text: 'zoneight234', expect: {value: 18, index: [1,3]} },
+      { text: '7pqrstsixteen', expect: {value: 66, index: [6,6]}},
+      { text: 'nineight', expect: {value: 98, index: [0,3]}},
+    ].map((test) => {
+      return {
+        ...test,
+        expect: [
+          {index: test.expect.index[0], value: +('' + test.expect.value).split('')[0]},
+          {index: test.expect.index[1], value: +('' + test.expect.value).split('')[1]},
+        ]
+      }
+    })
+
+    toTest.forEach(test => {
+      const value = test.expect.map(e => e.value);
+
+      it(`should find ${value} in '${test.text}'`, () => {
+        expect(getSpelledNumbers(test.text)).toEqual(test.expect)
+      })
+    })
+  });
+
 })
